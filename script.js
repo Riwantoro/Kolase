@@ -55,32 +55,38 @@ document.addEventListener("DOMContentLoaded", function() {
     photoItems.forEach(resetPhotoItem);
   });
 
-  downloadBtn.addEventListener("click", function() {
-    const templateContainer = document.querySelector(".template-container");
-    
-    const options = {
-      scale: 2,
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor: null,
-      logging: true,
-      onclone: function(clonedDoc) {
-        const clonedContainer = clonedDoc.querySelector(".template-container");
-        Array.from(clonedContainer.querySelectorAll("img")).forEach(img => {
-          img.style.maxWidth = "none";
-        });
-      }
-    };
+ // Modifikasi fungsi download di script.js
+downloadBtn.addEventListener("click", function() {
+  const templateContainer = document.querySelector(".template-container");
+   // Tambahkan class untuk menyembunyikan tombol hapus
+   templateContainer.classList.add("downloading");
+   const options = {
+    scale: 2,
+    useCORS: true,
+    allowTaint: true,
+    backgroundColor: null,
+    logging: true,
+    onclone: function(clonedDoc) {
+      const clonedContainer = clonedDoc.querySelector(".template-container");
+      
+      Array.from(clonedContainer.querySelectorAll(".delete-btn")).forEach(btn => {
+        btn.style.display = "none";
+      });
+    }
+  };
 
-    html2canvas(templateContainer, options).then(canvas => {
-      const link = document.createElement("a");
-      link.download = "riwantoro-kolase.png";
-      link.href = canvas.toDataURL("image/png", 1.0);
-      link.click();
-    }).catch(error => {
-      console.error("Error generating canvas:", error);
-    });
+  html2canvas(templateContainer, options).then(canvas => {
+    const link = document.createElement("a");
+    link.download = "riwantoro-kolase.png";
+    link.href = canvas.toDataURL("image/png", 1.0);
+    link.click();
+  }).catch(error => {
+    console.error("Error generating canvas:", error);
+  }).finally(() => {
+    // Hapus class downloading setelah selesai
+    templateContainer.classList.remove("downloading");
   });
+});
 
   const photoGrid = document.querySelector(".photo-grid");
   new Sortable(photoGrid, {

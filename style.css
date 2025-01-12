@@ -45,17 +45,24 @@ p {
 
 .photo-grid {
   position: absolute;
-  top: 50%;
+  top: 55%;    /* Sesuaikan posisi dari atas */
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 60%;
-  height: 70%;
+  width: 80%;  /* Perlebar grid foto */
+  height: 75%; /* Tingkatkan height untuk memenuhi space */
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(4, 1fr);
   gap: 5px;
   padding: 10px;
+  margin-bottom: 3px; /* Jarak dari bawah */
 }
+
+/* CSS untuk menyembunyikan tombol hapus saat download */
+.template-container.downloading .delete-btn {
+  display: none;
+}
+
 
 .photo-item {
   position: relative;
