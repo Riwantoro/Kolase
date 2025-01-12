@@ -41,14 +41,14 @@ p {
 
 .photo-grid {
   position: absolute;
-  top: 56%; /* Sesuaikan dengan area putih di template */
+  top: 55%; /* Posisi grid disesuaikan */
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 70%; /* Sesuaikan dengan area putih di template */
-  height: 75%; /* Sesuaikan dengan area putih di template */
+  width: 60%; /* Ukuran grid diperkecil */
+  height: 70%; /* Ukuran grid diperkecil */
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 2 kolom */
-  grid-template-rows: repeat(4, 1fr); /* 4 baris */
+  grid-template-rows: repeat(4, 1fr); /* 4 baris untuk 8 foto */
   gap: 2px; /* Jarak tipis antar foto */
   overflow: hidden; /* Pastikan foto tidak melebihi area */
 }
@@ -56,7 +56,7 @@ p {
 .photo-item {
   position: relative;
   width: 100%;
-  padding-top: 75%; /* Rasio 4:3 (persegi panjang) */
+  padding-top: 50%; /* Rasio disesuaikan (lebih kecil dari 56.25%) */
   background-color: rgba(255, 255, 255, 0.8);
   overflow: hidden;
 }
