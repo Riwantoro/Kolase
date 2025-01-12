@@ -1,21 +1,19 @@
-
-// script.js
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   const photoItems = document.querySelectorAll(".photo-item");
   const resetBtn = document.getElementById("reset-btn");
   const downloadBtn = document.getElementById("download-btn");
 
   function setupUploadInput(input, item) {
-    input.addEventListener("change", function(e) {
+    input.addEventListener("change", function (e) {
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = function(event) {
+        reader.onload = function (event) {
           const img = document.createElement("img");
           img.src = event.target.result;
           img.classList.add("uploaded-image");
-          
-          img.onload = function() {
+
+          img.onload = function () {
             item.innerHTML = "";
             item.appendChild(img);
 
@@ -24,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
             deleteBtn.classList.add("delete-btn");
             item.appendChild(deleteBtn);
 
-            deleteBtn.addEventListener("click", function() {
+            deleteBtn.addEventListener("click", function () {
               resetPhotoItem(item);
             });
           };
@@ -51,52 +49,52 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
-  resetBtn.addEventListener("click", function() {
+  resetBtn.addEventListener("click", function () {
     photoItems.forEach(resetPhotoItem);
   });
 
- // Modifikasi fungsi download di script.js
-downloadBtn.addEventListener("click", function() {
-  const templateContainer = document.querySelector(".template-container");
-   // Tambahkan class untuk menyembunyikan tombol hapus
-   templateContainer.classList.add("downloading");
-   const options = {
-    scale: 2,
-    useCORS: true,
-    allowTaint: true,
-    backgroundColor: null,
-    logging: true,
-    onclone: function(clonedDoc) {
-      const clonedContainer = clonedDoc.querySelector(".template-container");
-      
-      Array.from(clonedContainer.querySelectorAll(".delete-btn")).forEach(btn => {
-        btn.style.display = "none";
-      });
-    }
-  };
+  downloadBtn.addEventListener("click", function () {
+    const templateContainer = document.querySelector(".template-container");
+    templateContainer.classList.add("downloading");
 
-  html2canvas(templateContainer, options).then(canvas => {
-    const link = document.createElement("a");
-    link.download = "riwantoro-kolase.png";
-    link.href = canvas.toDataURL("image/png", 1.0);
-    link.click();
-  }).catch(error => {
-    console.error("Error generating canvas:", error);
-  }).finally(() => {
-    // Hapus class downloading setelah selesai
-    templateContainer.classList.remove("downloading");
+    const options = {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: null,
+      logging: true,
+      onclone: function (clonedDoc) {
+        const clonedContainer = clonedDoc.querySelector(".template-container");
+        Array.from(clonedContainer.querySelectorAll(".delete-btn")).forEach((btn) => {
+          btn.style.display = "none";
+        });
+      },
+    };
+
+    html2canvas(templateContainer, options)
+      .then((canvas) => {
+        const link = document.createElement("a");
+        link.download = "riwantoro-kolase.png";
+        link.href = canvas.toDataURL("image/png", 1.0);
+        link.click();
+      })
+      .catch((error) => {
+        console.error("Error generating canvas:", error);
+      })
+      .finally(() => {
+        templateContainer.classList.remove("downloading");
+      });
   });
-});
 
   const photoGrid = document.querySelector(".photo-grid");
   new Sortable(photoGrid, {
     animation: 150,
     ghostClass: "ghost",
-    onEnd: function(evt) {
+    onEnd: function (evt) {
       const items = photoGrid.querySelectorAll(".photo-item");
       items.forEach((item, index) => {
         item.dataset.index = index + 1;
       });
-    }
+    },
   });
 });
