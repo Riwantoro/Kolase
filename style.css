@@ -180,3 +180,7 @@ button:active {
     aspect-ratio: 1 / 1; /* Maintain square boxes */
   }
 }
+
+.hidden-for-download {
+  display: none !important;
+} 

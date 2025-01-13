@@ -57,6 +57,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const templateContainer = document.querySelector(".template-container");
     templateContainer.classList.add("downloading");
 
+    // Add hidden class to empty boxes before download
+    const photoItems = document.querySelectorAll(".photo-item");
+    photoItems.forEach(item => {
+      const hasImage = item.querySelector(".uploaded-image");
+      if (!hasImage) {
+        item.classList.add("hidden-for-download");
+      }
+    });
+
     const options = {
       scale: 2,
       useCORS: true,
@@ -67,6 +76,14 @@ document.addEventListener("DOMContentLoaded", function () {
         const clonedContainer = clonedDoc.querySelector(".template-container");
         Array.from(clonedContainer.querySelectorAll(".delete-btn")).forEach((btn) => {
           btn.style.display = "none";
+        });
+        
+        // Hide empty boxes in cloned document
+        Array.from(clonedContainer.querySelectorAll(".photo-item")).forEach((item) => {
+          const hasImage = item.querySelector(".uploaded-image");
+          if (!hasImage) {
+            item.style.display = "none";
+          }
         });
       },
     };
@@ -82,6 +99,10 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Error generating canvas:", error);
       })
       .finally(() => {
+        // Remove hidden class after download completes
+        photoItems.forEach(item => {
+          item.classList.remove("hidden-for-download");
+        });
         templateContainer.classList.remove("downloading");
       });
   });
