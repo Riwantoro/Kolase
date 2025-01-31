@@ -2,6 +2,39 @@ document.addEventListener("DOMContentLoaded", function () {
   const photoItems = document.querySelectorAll(".photo-item");
   const resetBtn = document.getElementById("reset-btn");
   const downloadBtn = document.getElementById("download-btn");
+  const footerTextInput = document.getElementById("footer-text-input");
+  const footerTextDisplay = document.getElementById("footer-text-display");
+  const photoGrid = document.querySelector(".photo-grid");
+
+  // Fungsi untuk menghitung jumlah foto yang diunggah
+  function countUploadedPhotos() {
+    let count = 0;
+    photoItems.forEach((item) => {
+      if (item.querySelector(".uploaded-image")) {
+        count++;
+      }
+    });
+    return count;
+  }
+
+  // Fungsi untuk mengupdate jumlah baris pada grid
+  function updateGridRows() {
+    const uploadedCount = countUploadedPhotos();
+    let rows = 1;
+
+    if (uploadedCount >= 3 && uploadedCount <= 4) {
+      rows = 2;
+    } else if (uploadedCount >= 5 && uploadedCount <= 6) {
+      rows = 3;
+    } else if (uploadedCount >= 7 && uploadedCount <= 8) {
+      rows = 4;
+    }
+
+    // Hapus semua class rows sebelumnya
+    photoGrid.classList.remove("rows-1", "rows-2", "rows-3", "rows-4");
+    // Tambahkan class rows yang sesuai
+    photoGrid.classList.add(`rows-${rows}`);
+  }
 
   function setupUploadInput(input, item) {
     input.addEventListener("change", function (e) {
@@ -24,7 +57,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
             deleteBtn.addEventListener("click", function () {
               resetPhotoItem(item);
+              updateGridRows(); // Update grid setelah menghapus foto
             });
+
+            updateGridRows(); // Update grid setelah mengunggah foto
           };
         };
         reader.readAsDataURL(file);
@@ -51,6 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   resetBtn.addEventListener("click", function () {
     photoItems.forEach(resetPhotoItem);
+    updateGridRows(); // Update grid setelah reset
   });
 
   downloadBtn.addEventListener("click", function () {
@@ -59,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Add hidden class to empty boxes before download
     const photoItems = document.querySelectorAll(".photo-item");
-    photoItems.forEach(item => {
+    photoItems.forEach((item) => {
       const hasImage = item.querySelector(".uploaded-image");
       if (!hasImage) {
         item.classList.add("hidden-for-download");
@@ -77,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
         Array.from(clonedContainer.querySelectorAll(".delete-btn")).forEach((btn) => {
           btn.style.display = "none";
         });
-        
+
         // Hide empty boxes in cloned document
         Array.from(clonedContainer.querySelectorAll(".photo-item")).forEach((item) => {
           const hasImage = item.querySelector(".uploaded-image");
@@ -100,14 +137,13 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .finally(() => {
         // Remove hidden class after download completes
-        photoItems.forEach(item => {
+        photoItems.forEach((item) => {
           item.classList.remove("hidden-for-download");
         });
         templateContainer.classList.remove("downloading");
       });
   });
 
-  const photoGrid = document.querySelector(".photo-grid");
   new Sortable(photoGrid, {
     animation: 150,
     ghostClass: "ghost",
@@ -117,5 +153,9 @@ document.addEventListener("DOMContentLoaded", function () {
         item.dataset.index = index + 1;
       });
     },
+  });
+
+  footerTextInput.addEventListener("input", function () {
+    footerTextDisplay.textContent = footerTextInput.value.toUpperCase();
   });
 });
