@@ -32,38 +32,43 @@
       overflow: hidden;
     }
 
+
     .header {
-      background: #07213D;
-      padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 3px solid #EEBF63;
-    }
+  background: #07213D;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Logo dan teks sejajar vertikal */
+  border-bottom: 3px solid #EEBF63;
+}
 
-    .logo-container {
-      width: 80px;
-      height: 80px;
-      object-fit: contain;
-    }
+.logo-container {
+  width: 60px; /* Ukuran logo diperkecil */
+  height: 60px; /* Ukuran logo diperkecil */
+  object-fit: contain;
+}
 
-    .header-text {
-      text-align: center;
-      color: #fff;
-    }
+.header-text {
+  text-align: center;
+  color: #fff;
+  flex: 1; /* Agar teks mengambil ruang yang tersedia */
+  margin: 0 20px; /* Jarak antara logo dan teks */
+}
 
-    .header-text h1 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 24px;
-      font-weight: 800;
-      margin-bottom: 5px;
-    }
+.header-text h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 24px; /* Ukuran font H1 sama dengan desktop */
+  font-weight: 800;
+  margin-bottom: 5px; /* Jarak antara H1 dan H2 */
+  line-height: 1.2; /* Tinggi baris untuk keterbacaan */
+}
 
-    .header-text h2 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 20px;
-      font-weight: 700;
-    }
+.header-text h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px; /* Ukuran font H2 sama dengan desktop */
+  font-weight: 700;
+  line-height: 1.2; /* Tinggi baris untuk keterbacaan */
+}
 
     .content-wrapper {
       padding: 20px;
@@ -249,15 +254,19 @@
     }
 
     @media (max-width: 768px) {
+      .header {
+    padding: 15px; /* Padding lebih kecil di mobile */
+  }
+
       .header-text h1 {
         font-size: 13px;
       }
       .header-text h2 {
-        font-size: 16px;
+        font-size: 12px;
       }
       .logo-container {
-        width: 60px;
-        height: 60px;
+        width: 50px;
+        height: 50px;
       }
       .photo-grid {
         gap: 8px;
