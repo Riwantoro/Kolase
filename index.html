@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=1200">
   <title>Laporan Atensi Kegiatan</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
   <style>
@@ -32,43 +32,42 @@
       overflow: hidden;
     }
 
-
     .header {
-  background: #07213D;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center; /* Logo dan teks sejajar vertikal */
-  border-bottom: 3px solid #EEBF63;
-}
+      background: #07213D;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid #EEBF63;
+    }
 
-.logo-container {
-  width: 60px; /* Ukuran logo diperkecil */
-  height: 60px; /* Ukuran logo diperkecil */
-  object-fit: contain;
-}
+    .logo-container {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+    }
 
-.header-text {
-  text-align: center;
-  color: #fff;
-  flex: 1; /* Agar teks mengambil ruang yang tersedia */
-  margin: 0 20px; /* Jarak antara logo dan teks */
-}
+    .header-text {
+      text-align: center;
+      color: #fff;
+      flex: 1;
+      margin: 0 20px;
+    }
 
-.header-text h1 {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 24px; /* Ukuran font H1 sama dengan desktop */
-  font-weight: 800;
-  margin-bottom: 5px; /* Jarak antara H1 dan H2 */
-  line-height: 1.2; /* Tinggi baris untuk keterbacaan */
-}
+    .header-text h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 23px;
+      font-weight: 800;
+      margin-bottom: 5px;
+      line-height: 1.2;
+    }
 
-.header-text h2 {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 18px; /* Ukuran font H2 sama dengan desktop */
-  font-weight: 700;
-  line-height: 1.2; /* Tinggi baris untuk keterbacaan */
-}
+    .header-text h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
 
     .content-wrapper {
       padding: 20px;
@@ -142,22 +141,21 @@
       margin: 20px 0;
     }
 
-    /* CSS untuk mengatur jumlah baris */
-.photo-grid.rows-1 {
-  grid-template-rows: repeat(1, 1fr);
-}
+    .photo-grid.rows-1 {
+      grid-template-rows: repeat(1, 1fr);
+    }
 
-.photo-grid.rows-2 {
-  grid-template-rows: repeat(2, 1fr);
-}
+    .photo-grid.rows-2 {
+      grid-template-rows: repeat(2, 1fr);
+    }
 
-.photo-grid.rows-3 {
-  grid-template-rows: repeat(3, 1fr);
-}
+    .photo-grid.rows-3 {
+      grid-template-rows: repeat(3, 1fr);
+    }
 
-.photo-grid.rows-4 {
-  grid-template-rows: repeat(4, 1fr);
-}
+    .photo-grid.rows-4 {
+      grid-template-rows: repeat(4, 1fr);
+    }
 
     button {
       padding: 12px 24px;
@@ -252,35 +250,6 @@
     .template-container.downloading .footer-input {
       display: none;
     }
-
-    @media (max-width: 768px) {
-      .header {
-    padding: 15px; /* Padding lebih kecil di mobile */
-  }
-
-      .header-text h1 {
-        font-size: 11px;
-      }
-      .header-text h2 {
-        font-size: 12px;
-      }
-      .logo-container {
-        width: 50px;
-        height: 50px;
-      }
-      .photo-grid {
-        gap: 8px;
-      }
-      .actions {
-        flex-direction: column;
-        gap: 15px;
-      }
-      button {
-        width: 100%;
-        padding: 10px 20px;
-        font-size: 0.9rem;
-      }
-    }
   </style>
 </head>
 <body>
@@ -289,7 +258,7 @@
       <img src="assets/logo1.png" alt="Logo 1" class="logo-container">
       <div class="header-text">
         <h1>LAPORAN ATENSI KEGIATAN</h1>
-        <h2>LAPAS KELAS IIA KEROBOKAN</h2>
+        <h2>LEMBAGA PEMASYARAKATAN KELAS IIA KEROBOKAN</h2>
       </div>
       <img src="assets/logo2.png" alt="Logo 2" class="logo-container">
     </div>
@@ -349,4 +318,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
