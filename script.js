@@ -91,9 +91,10 @@ document.addEventListener("DOMContentLoaded", function () {
         img.src = dataUrl;
         img.classList.add("uploaded-image");
 
-        img.onload = function () {
-          item.innerHTML = "";
-          item.appendChild(img);
+          img.onload = function () {
+            item.innerHTML = "";
+            item.classList.add("has-image");
+            item.appendChild(img);
 
           const deleteBtn = document.createElement("button");
           deleteBtn.innerText = "Hapus";
@@ -115,6 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function resetPhotoItem(item) {
     const index = item.dataset.index;
+    item.classList.remove("has-image");
     item.innerHTML = `
       <input type="file" accept="image/*" class="upload-input" id="upload-input-${index}">
       <label for="upload-input-${index}" class="upload-label">Upload Foto ${index}</label>
