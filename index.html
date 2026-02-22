@@ -159,8 +159,31 @@
       grid-template-rows: repeat(4, 1fr);
     }
 
+    .photo-grid.layout-5 {
+      grid-template-areas:
+        "a b"
+        "c c"
+        "d e";
+    }
+
+    .photo-grid.layout-5 .photo-item:nth-child(1) {
+      grid-area: a;
+    }
+
+    .photo-grid.layout-5 .photo-item:nth-child(2) {
+      grid-area: b;
+    }
+
     .photo-grid.layout-5 .photo-item:nth-child(3) {
-      grid-column: 1 / -1;
+      grid-area: c;
+    }
+
+    .photo-grid.layout-5 .photo-item:nth-child(4) {
+      grid-area: d;
+    }
+
+    .photo-grid.layout-5 .photo-item:nth-child(5) {
+      grid-area: e;
     }
 
     button {
