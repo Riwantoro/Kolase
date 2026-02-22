@@ -164,6 +164,7 @@
         "a b"
         "c c"
         "d e";
+      grid-template-rows: repeat(3, auto);
     }
 
     .photo-grid.layout-5 .photo-item:nth-child(1) {
@@ -176,6 +177,10 @@
 
     .photo-grid.layout-5 .photo-item:nth-child(3) {
       grid-area: c;
+    }
+
+    .photo-grid.layout-5 .photo-item:nth-child(3) {
+      aspect-ratio: 32 / 9;
     }
 
     .photo-grid.layout-5 .photo-item:nth-child(4) {
