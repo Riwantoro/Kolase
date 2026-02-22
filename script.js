@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const footerTextInput = document.getElementById("footer-text-input");
   const footerTextDisplay = document.getElementById("footer-text-display");
   const photoGrid = document.querySelector(".photo-grid");
+  const MAX_IMAGE_DIMENSION = 1600;
+  const JPEG_QUALITY = 0.9;
 
   // Fungsi untuk menghitung jumlah foto yang diunggah
   function countUploadedPhotos() {
@@ -34,36 +36,79 @@ document.addEventListener("DOMContentLoaded", function () {
     photoGrid.classList.remove("rows-1", "rows-2", "rows-3", "rows-4");
     // Tambahkan class rows yang sesuai
     photoGrid.classList.add(`rows-${rows}`);
+
+    // Layout khusus saat ada 5 foto: 2 - 1 (melebar) - 2
+    photoGrid.classList.toggle("layout-5", uploadedCount === 5);
+  }
+
+  function loadImageFromFile(file) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const objectUrl = URL.createObjectURL(file);
+      img.onload = () => {
+        URL.revokeObjectURL(objectUrl);
+        resolve(img);
+      };
+      img.onerror = (error) => {
+        URL.revokeObjectURL(objectUrl);
+        reject(error);
+      };
+      img.src = objectUrl;
+      img.decoding = "async";
+    });
+  }
+
+  async function downscaleImage(file) {
+    const img = await loadImageFromFile(file);
+    const longestSide = Math.max(img.naturalWidth, img.naturalHeight);
+    const scale = Math.min(1, MAX_IMAGE_DIMENSION / longestSide);
+    const targetWidth = Math.round(img.naturalWidth * scale);
+    const targetHeight = Math.round(img.naturalHeight * scale);
+
+    const canvas = document.createElement("canvas");
+    canvas.width = targetWidth;
+    canvas.height = targetHeight;
+    const ctx = canvas.getContext("2d", { alpha: false });
+    ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+    const isPng = file.type === "image/png";
+    const mimeType = isPng ? "image/png" : "image/jpeg";
+    const quality = isPng ? 1.0 : JPEG_QUALITY;
+
+    return canvas.toDataURL(mimeType, quality);
   }
 
   function setupUploadInput(input, item) {
-    input.addEventListener("change", function (e) {
+    input.addEventListener("change", async function (e) {
       const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (event) {
-          const img = document.createElement("img");
-          img.src = event.target.result;
-          img.classList.add("uploaded-image");
+      if (!file) {
+        return;
+      }
 
-          img.onload = function () {
-            item.innerHTML = "";
-            item.appendChild(img);
+      try {
+        const dataUrl = await downscaleImage(file);
+        const img = document.createElement("img");
+        img.src = dataUrl;
+        img.classList.add("uploaded-image");
 
-            const deleteBtn = document.createElement("button");
-            deleteBtn.innerText = "Hapus";
-            deleteBtn.classList.add("delete-btn");
-            item.appendChild(deleteBtn);
+        img.onload = function () {
+          item.innerHTML = "";
+          item.appendChild(img);
 
-            deleteBtn.addEventListener("click", function () {
-              resetPhotoItem(item);
-              updateGridRows(); // Update grid setelah menghapus foto
-            });
+          const deleteBtn = document.createElement("button");
+          deleteBtn.innerText = "Hapus";
+          deleteBtn.classList.add("delete-btn");
+          item.appendChild(deleteBtn);
 
-            updateGridRows(); // Update grid setelah mengunggah foto
-          };
+          deleteBtn.addEventListener("click", function () {
+            resetPhotoItem(item);
+            updateGridRows(); // Update grid setelah menghapus foto
+          });
+
+          updateGridRows(); // Update grid setelah mengunggah foto
         };
-        reader.readAsDataURL(file);
+      } catch (error) {
+        console.error("Error processing image:", error);
       }
     });
   }

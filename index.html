@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=1200">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Laporan Atensi Kegiatan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
   <style>
     * {
@@ -86,8 +88,8 @@
     .photo-item {
       position: relative;
       width: 100%;
-      height: 0;
-      padding-bottom: 56.25%;
+      height: auto;
+      aspect-ratio: 16 / 9;
       background: #E0E2E3;
       border: 2px #07213D;
       overflow: hidden;
@@ -155,6 +157,10 @@
 
     .photo-grid.rows-4 {
       grid-template-rows: repeat(4, 1fr);
+    }
+
+    .photo-grid.layout-5 .photo-item:nth-child(3) {
+      grid-column: 1 / -1;
     }
 
     button {
@@ -240,6 +246,13 @@
       font-weight: 500;
     }
 
+    .footer-copyright {
+      margin-top: 6px;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
     .photo-item.hidden-for-download {
       display: none;
     }
@@ -250,17 +263,57 @@
     .template-container.downloading .footer-input {
       display: none;
     }
+
+    @supports not (aspect-ratio: 1 / 1) {
+      .photo-item {
+        height: 0;
+        padding-bottom: 56.25%;
+      }
+    }
+
+    @media (max-width: 900px) {
+      body {
+        padding: 12px;
+      }
+
+      .template-container {
+        border-radius: 8px;
+      }
+
+      .header {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+
+      .header-text {
+        margin: 0;
+      }
+
+      .photo-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .actions {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="template-container">
     <div class="header">
-      <img src="assets/logo1.png" alt="Logo 1" class="logo-container">
+      <img src="assets/logo1.png" alt="Logo 1" class="logo-container" loading="lazy">
       <div class="header-text">
         <h1>LAPORAN ATENSI KEGIATAN</h1>
         <h2>LEMBAGA PEMASYARAKATAN KELAS IIA KEROBOKAN</h2>
       </div>
-      <img src="assets/logo2.png" alt="Logo 2" class="logo-container">
+      <img src="assets/logo2.png" alt="Logo 2" class="logo-container" loading="lazy">
     </div>
     
     <div class="content-wrapper">
@@ -310,11 +363,12 @@
         <input type="text" id="footer-text-input" placeholder="Sub Seksi Bagian">
       </div>
       <div class="footer-text" id="footer-text-display"></div>
+      <div class="footer-copyright">(c) LamtorroTech</div>
     </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-  <script src="script.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+  <script defer src="script.js"></script>
 </body>
 </html>
