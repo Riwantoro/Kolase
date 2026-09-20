@@ -2,8 +2,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const photoItems = document.querySelectorAll(".photo-item");
   const resetBtn = document.getElementById("reset-btn");
   const downloadBtn = document.getElementById("download-btn");
+  const exportLink = document.getElementById("export-link");
   const footerTextInput = document.getElementById("footer-text-input");
   const footerTextDisplay = document.getElementById("footer-text-display");
+  const footerMeta = document.getElementById("footer-meta");
   const photoGrid = document.querySelector(".photo-grid");
   const MAX_IMAGE_DIMENSION = 1600;
   const JPEG_QUALITY = 0.9;
@@ -39,6 +41,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Layout khusus saat ada 5 foto: 2 - 1 (melebar) - 2
     photoGrid.classList.toggle("layout-5", uploadedCount === 5);
+    photoGrid.classList.toggle("layout-2", uploadedCount === 2);
+  }
+
+  function formatReportTime() {
+    return new Intl.DateTimeFormat("id-ID", {
+      dateStyle: "long",
+      timeStyle: "short",
+    }).format(new Date());
+  }
+
+  function getCurrentLocation() {
+    if (!navigator.geolocation) {
+      return Promise.resolve("Lokasi: tidak didukung perangkat");
+    }
+
+    return new Promise((resolve) => {
+      navigator.geolocation.getCurrentPosition(
+        ({ coords }) => resolve(`Lokasi: ${coords.latitude.toFixed(5)}, ${coords.longitude.toFixed(5)}`),
+        () => resolve("Lokasi: tidak tersedia"),
+        { enableHighAccuracy: false, timeout: 5000, maximumAge: 300000 }
+      );
+    });
+  }
+
+  async function updateReportMeta() {
+    footerMeta.textContent = `Dibuat: ${formatReportTime()} · Mengambil lokasi...`;
+    const location = await getCurrentLocation();
+    footerMeta.textContent = `Dibuat: ${formatReportTime()} · ${location}`;
   }
 
   function loadImageFromFile(file) {
@@ -137,7 +167,9 @@ document.addEventListener("DOMContentLoaded", function () {
     updateGridRows(); // Update grid setelah reset
   });
 
-  downloadBtn.addEventListener("click", function () {
+  downloadBtn.addEventListener("click", async function () {
+    exportLink.hidden = true;
+    await updateReportMeta();
     const templateContainer = document.querySelector(".template-container");
     templateContainer.classList.add("downloading");
 
@@ -174,10 +206,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     html2canvas(templateContainer, options)
       .then((canvas) => {
-        const link = document.createElement("a");
-        link.download = "riwantoro-kolase.png";
-        link.href = canvas.toDataURL("image/png", 1.0);
-        link.click();
+        exportLink.href = canvas.toDataURL("image/png", 1.0);
+        exportLink.hidden = false;
       })
       .catch((error) => {
         console.error("Error generating canvas:", error);
