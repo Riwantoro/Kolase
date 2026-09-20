@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
           });
         },
         () => resolve({ isAllowed: false, label: "📍 Lokasi tidak tersedia" }),
-        { enableHighAccuracy: false, timeout: 5000, maximumAge: 300000 }
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
       );
     });
   }
