@@ -4,11 +4,15 @@ document.addEventListener("DOMContentLoaded", function () {
   const downloadBtn = document.getElementById("download-btn");
   const exportLink = document.getElementById("export-link");
   const footerTextInput = document.getElementById("footer-text-input");
-  const footerTextDisplay = document.getElementById("footer-text-display");
   const footerMeta = document.getElementById("footer-meta");
+  const reportTitle = document.getElementById("report-title");
   const photoGrid = document.querySelector(".photo-grid");
   const MAX_IMAGE_DIMENSION = 1600;
   const JPEG_QUALITY = 0.9;
+  const LAPAS_CENTER = { latitude: -8.67349, longitude: 115.16952 };
+  const LAPAS_RADIUS_METERS = 2000;
+  const LAPAS_NAME = "Lapas Kelas IIA Kerobokan, Kerobokan Kelod, Kuta Utara";
+  const BASE_REPORT_TITLE = "LAPORAN ATENSI KEGIATAN";
 
   // Fungsi untuk menghitung jumlah foto yang diunggah
   function countUploadedPhotos() {
@@ -45,30 +49,57 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function formatReportTime() {
-    return new Intl.DateTimeFormat("id-ID", {
-      dateStyle: "long",
-      timeStyle: "short",
+    const value = new Intl.DateTimeFormat("id-ID", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+      timeZone: "Asia/Makassar",
     }).format(new Date());
+
+    return `${value.replace(" pukul ", " (")} WITA)`;
+  }
+
+  function distanceInMeters(latitude, longitude) {
+    const toRadians = (degrees) => (degrees * Math.PI) / 180;
+    const latDelta = toRadians(latitude - LAPAS_CENTER.latitude);
+    const lonDelta = toRadians(longitude - LAPAS_CENTER.longitude);
+    const a = Math.sin(latDelta / 2) ** 2
+      + Math.cos(toRadians(LAPAS_CENTER.latitude)) * Math.cos(toRadians(latitude)) * Math.sin(lonDelta / 2) ** 2;
+
+    return 6371000 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
   function getCurrentLocation() {
     if (!navigator.geolocation) {
-      return Promise.resolve("Lokasi: tidak didukung perangkat");
+      return Promise.resolve({ isAllowed: false, label: "📍 Lokasi tidak didukung perangkat" });
     }
 
     return new Promise((resolve) => {
       navigator.geolocation.getCurrentPosition(
-        ({ coords }) => resolve(`Lokasi: ${coords.latitude.toFixed(5)}, ${coords.longitude.toFixed(5)}`),
-        () => resolve("Lokasi: tidak tersedia"),
+        ({ coords }) => {
+          const distance = distanceInMeters(coords.latitude, coords.longitude);
+          resolve({
+            isAllowed: distance <= LAPAS_RADIUS_METERS,
+            label: distance <= LAPAS_RADIUS_METERS
+              ? `📍 Lokasi: ${LAPAS_NAME}`
+              : "📍 Lokasi di luar area Lapas Kelas IIA Kerobokan",
+          });
+        },
+        () => resolve({ isAllowed: false, label: "📍 Lokasi tidak tersedia" }),
         { enableHighAccuracy: false, timeout: 5000, maximumAge: 300000 }
       );
     });
   }
 
   async function updateReportMeta() {
-    footerMeta.textContent = `Dibuat: ${formatReportTime()} · Mengambil lokasi...`;
+    footerMeta.textContent = `🕒 Dibuat: ${formatReportTime()}\n📍 Mengambil lokasi...`;
     const location = await getCurrentLocation();
-    footerMeta.textContent = `Dibuat: ${formatReportTime()} · ${location}`;
+    footerMeta.textContent = `🕒 Dibuat: ${formatReportTime()}\n${location.label}`;
+    return location.isAllowed;
   }
 
   function loadImageFromFile(file) {
@@ -169,7 +200,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   downloadBtn.addEventListener("click", async function () {
     exportLink.hidden = true;
-    await updateReportMeta();
+    const isInLapasArea = await updateReportMeta();
+    if (!isInLapasArea) {
+      window.alert("Kolase hanya dapat dibuat dari area Lapas Kelas IIA Kerobokan.");
+      return;
+    }
     const templateContainer = document.querySelector(".template-container");
     templateContainer.classList.add("downloading");
 
@@ -233,6 +268,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   footerTextInput.addEventListener("input", function () {
-    footerTextDisplay.textContent = footerTextInput.value.toUpperCase();
+    const unit = footerTextInput.value.trim().toUpperCase();
+    reportTitle.textContent = unit ? `${BASE_REPORT_TITLE} ${unit}` : BASE_REPORT_TITLE;
   });
 });
