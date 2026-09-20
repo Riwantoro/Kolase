@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const photoItems = document.querySelectorAll(".photo-item");
   const resetBtn = document.getElementById("reset-btn");
   const downloadBtn = document.getElementById("download-btn");
-  const exportLink = document.getElementById("export-link");
   const footerTextInput = document.getElementById("footer-text-input");
   const footerMeta = document.getElementById("footer-meta");
   const reportTitle = document.getElementById("report-title");
@@ -197,7 +196,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   downloadBtn.addEventListener("click", async function () {
-    exportLink.hidden = true;
     await updateReportMeta();
     const templateContainer = document.querySelector(".template-container");
     templateContainer.classList.add("downloading");
@@ -235,8 +233,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     html2canvas(templateContainer, options)
       .then((canvas) => {
-        exportLink.href = canvas.toDataURL("image/png", 1.0);
-        exportLink.hidden = false;
+        const link = document.createElement("a");
+        link.download = `laporan-atensi-${Date.now()}.png`;
+        link.href = canvas.toDataURL("image/png", 1.0);
+        link.click();
       })
       .catch((error) => {
         console.error("Error generating canvas:", error);

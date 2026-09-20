@@ -201,8 +201,7 @@
       aspect-ratio: 16 / 9;
     }
 
-    button,
-    .export-link {
+    button {
       padding: 12px 24px;
       font-size: 1rem;
       font-weight: 600;
@@ -214,20 +213,6 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       min-width: 150px;
-    }
-
-    .export-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: #EEBF63;
-      color: #07213D;
-      border: 2px solid #EEBF63;
-      text-decoration: none;
-    }
-
-    .export-link[hidden] {
-      display: none;
     }
 
     button#reset-btn {
@@ -386,7 +371,6 @@
       <div class="actions">
         <button id="reset-btn">Reset</button>
         <button id="download-btn">Download Kolase</button>
-        <a id="export-link" class="export-link" download="riwantoro-kolase.png" hidden>Simpan hasil PNG</a>
       </div>
     </div>
 
