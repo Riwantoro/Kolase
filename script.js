@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function getCurrentLocation() {
     if (!navigator.geolocation) {
-      return Promise.resolve({ isAllowed: false, label: "📍 Lokasi tidak didukung perangkat" });
+      return Promise.resolve({ label: "📍 Lokasi tidak didukung perangkat" });
     }
 
     return new Promise((resolve) => {
@@ -83,13 +83,12 @@ document.addEventListener("DOMContentLoaded", function () {
         ({ coords }) => {
           const distance = distanceInMeters(coords.latitude, coords.longitude);
           resolve({
-            isAllowed: distance <= LAPAS_RADIUS_METERS,
             label: distance <= LAPAS_RADIUS_METERS
               ? `📍 Lokasi: ${LAPAS_NAME}`
-              : "📍 Lokasi di luar area Lapas Kelas IIA Kerobokan",
+              : `📍 Lokasi: ${coords.latitude.toFixed(5)}, ${coords.longitude.toFixed(5)} (Google Maps)`,
           });
         },
-        () => resolve({ isAllowed: false, label: "📍 Lokasi tidak tersedia" }),
+        () => resolve({ label: "📍 Lokasi tidak tersedia" }),
         { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
       );
     });
@@ -99,7 +98,6 @@ document.addEventListener("DOMContentLoaded", function () {
     footerMeta.textContent = `🕒 Dibuat: ${formatReportTime()}\n📍 Mengambil lokasi...`;
     const location = await getCurrentLocation();
     footerMeta.textContent = `🕒 Dibuat: ${formatReportTime()}\n${location.label}`;
-    return location.isAllowed;
   }
 
   function loadImageFromFile(file) {
@@ -200,11 +198,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   downloadBtn.addEventListener("click", async function () {
     exportLink.hidden = true;
-    const isInLapasArea = await updateReportMeta();
-    if (!isInLapasArea) {
-      window.alert("Kolase hanya dapat dibuat dari area Lapas Kelas IIA Kerobokan.");
-      return;
-    }
+    await updateReportMeta();
     const templateContainer = document.querySelector(".template-container");
     templateContainer.classList.add("downloading");
 
